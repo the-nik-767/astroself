@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1061722426474",
+    "project_id": "astroself-b6835",
+    "storage_bucket": "astroself-b6835.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061722426474:android:2fd65a19b917d558b54e13",
+        "android_client_info": {
+          "package_name": "com.astroself"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061722426474-3aivdpu11tr8i1h52a54ovkrv8ls021p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.astroself",
+            "certificate_hash": "sha1:YOUR_SHA1_FINGERPRINT_HERE"
+          }
+        },
+        {
+          "client_id": "1061722426474-3aivdpu11tr8i1h52a54ovkrv8ls021p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnjQB8ll3mWB91RYxmbkXo2riwnY6MnFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
