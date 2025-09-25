@@ -10,6 +10,8 @@ export namespace Api {
         complete_profile: boolean;
         members_allow: number;
         current_members: number;
+        child_allow: number;
+        current_child: number;
         age: string;
         birth_data: BirthData;
         birthplace: string;

@@ -4,6 +4,38 @@
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        <item name="android:datePickerDialogTheme">@style/DatePickerTheme</item>
+        <item name="android:timePickerDialogTheme">@style/TimePickerTheme</item>
+    </style>
+
+    <!-- Custom Date Picker Theme -->
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/custom_picker_accent</item>
+        <item name="android:textColorPrimary">@color/custom_picker_text</item>
+        <item name="android:background">@color/custom_picker_background</item>
+        <item name="android:textColor">@color/custom_picker_text</item>
+        <item name="android:colorBackground">@color/custom_picker_background</item>
+        <item name="android:colorPrimary">@color/custom_picker_primary</item>
+        <item name="android:colorPrimaryDark">@color/custom_picker_primary_dark</item>
+        <item name="android:colorAccent">@color/custom_picker_accent</item>
+        <item name="android:windowBackground">@color/custom_picker_background</item>
+        <item name="android:colorControlHighlight">@color/custom_picker_control_highlight</item>
+        <item name="android:colorControlActivated">@color/custom_picker_control_activated</item>
+    </style>
+
+    <!-- Custom Time Picker Theme -->
+    <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/custom_picker_accent</item>
+        <item name="android:textColorPrimary">@color/custom_picker_text</item>
+        <item name="android:background">@color/custom_picker_background</item>
+        <item name="android:textColor">@color/custom_picker_text</item>
+        <item name="android:colorBackground">@color/custom_picker_background</item>
+        <item name="android:colorPrimary">@color/custom_picker_primary</item>
+        <item name="android:colorPrimaryDark">@color/custom_picker_primary_dark</item>
+        <item name="android:colorAccent">@color/custom_picker_accent</item>
+        <item name="android:windowBackground">@color/custom_picker_background</item>
+        <item name="android:colorControlHighlight">@color/custom_picker_control_highlight</item>
+        <item name="android:colorControlActivated">@color/custom_picker_control_activated</item>
     </style>
 
 </resources>

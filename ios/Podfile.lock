@@ -2464,7 +2464,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNDateTimePicker (8.4.4):
+  - RNDateTimePicker (8.4.5):
     - boost
     - DoubleConversion
     - fast_float
@@ -2566,7 +2566,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNScreens (4.15.2):
+  - RNScreens (4.16.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2593,10 +2593,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.15.2)
+    - RNScreens/common (= 4.16.0)
     - SocketRocket
     - Yoga
-  - RNScreens/common (4.15.2):
+  - RNScreens/common (4.16.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2625,7 +2625,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNSVG (15.12.1):
+  - RNSVG (15.13.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2651,10 +2651,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.12.1)
+    - RNSVG/common (= 15.13.0)
     - SocketRocket
     - Yoga
-  - RNSVG/common (15.12.1):
+  - RNSVG/common (15.13.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -3076,15 +3076,15 @@ SPEC CHECKSUMS:
   ReactCommon: 3eac56679c06fb4f4109b25d816fac2fc49525b1
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNCAsyncStorage: b39dac18b8b7e63d999226ccafabf1c059fd5bc6
-  RNDateTimePicker: d40dd6cc45261684264a643609b53cab38b8bd6b
+  RNDateTimePicker: aa4aad02c44028533aa9661ba06712475c6f2eee
   RNFBApp: a1b5a014860207f60c7f4826e8ebad91939c07c7
   RNFBAuth: cb76fe1bff7995f649cae738e60b7fc49c4f7438
   RNFBCrashlytics: 2e2121d3391ce1af82c1d2fee1eea74b192905f7
   RNFBMessaging: 137eaef10a2f948c02d68a47e683a66dede82682
   RNGoogleSignin: 791212a9ed439b7d2fbec212af0a494ec3e7ecd9
   RNLocalize: cf9032531b510768d51a2fe6934114913c813591
-  RNScreens: ecf9a7b2af5b55185854ed0f010bd37c81543569
-  RNSVG: 2b759828796231a9480aac57eff9e2fb357c2d6e
+  RNScreens: 2501d46f0eaf0c0a076b257fb1e92687b790c593
+  RNSVG: f85454eab6c294953caa2bfba4896136c73bfbe4
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: be78ddad0c56d06a5e41eaef4bfbbd49b86a4d07
 

@@ -37,8 +37,8 @@ const SnapshotPredictions: React.FC<SnapshotPredictionsProps> = ({ selectedMembe
     },
     {
       id: 2,
-      title: 'Your Predictions',
-      value: 'Your Predictions',
+      title: 'Your Personality',
+      value: 'Your Personality',
       subtitle: '',
       icon: require('../../assets/icons/GeneralAnalysis/SnapshotPrediction.png'),
     },

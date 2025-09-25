@@ -39,11 +39,11 @@ const planetNameToId: { [key: string]: number } = {
 
 // Dasha type options
 const dashaTypes = [
-  { key: 'major', label: 'MahaDasha' },
-  { key: 'minor', label: 'AntarDasha' },
-  { key: 'sub_minor', label: 'PratyantarDasha' },
-  { key: 'sub_sub_minor', label: 'SookshmaDasha' },
-  { key: 'sub_sub_sub_minor', label: 'PranDasha' },
+  { key: 'major', label: 'Maha dasha' },
+  { key: 'minor', label: 'Antar dasha' },
+  { key: 'sub_minor', label: 'Pratyantar dasha' },
+  { key: 'sub_sub_minor', label: 'Sookshma dasha' },
+  { key: 'sub_sub_sub_minor', label: 'Pran dasha' },
 ];
 
 interface DashaTableItem {
@@ -165,7 +165,7 @@ const DashaScreen = ({
 
       if (planetIcon && planetIcon.path) {
         // Return the path as a URI for remote images
-        return { uri: `http://astrology.hcshub.in/api/${planetIcon.path}` };
+        return { uri: `https://astrology.hcshub.in/api/${planetIcon.path}` };
       }
 
       return planetIcons[planetId] || planetIcons[6]; // Fallback icon
@@ -240,7 +240,7 @@ const DashaScreen = ({
   // const currentDashaData = getCurrentDashaData();
   const selectedDashaLabel =
     dashaTypes.find(type => type.key === selectedDashaType)?.label ||
-    'MahaDasha';
+    'Maha dasha';
 
   console.log('currentDashaData===>', currentDashaData);
   console.log('selectedDashaLabel===>', selectedDashaLabel);

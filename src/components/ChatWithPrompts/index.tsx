@@ -76,7 +76,11 @@ const ChatWithPrompts: React.FC<ChatWithPromptsProps> = ({
 
   // topic state
   const [selectedTopicValue, setSelectedTopicValue] = useState(
-    cardTitles === 'Antardasha' ? 'General Analysis' : _tab === 'SnapCast' ? 'Your Predictions' : 'Your Tendencies'
+    cardTitles === 'Antardasha'
+      ? 'General Analysis'
+      : _tab === 'SnapCast'
+      ? 'Your Personality'
+      : 'Your Tendencies',
   );
 
 
@@ -188,9 +192,9 @@ const ChatWithPrompts: React.FC<ChatWithPromptsProps> = ({
           case 'General Analysis':
             mainHeading = 'General Analysis';
             break;
-          case 'Your Predictions':
-              mainHeading = 'Your Predictions';
-              break;
+          case 'Your Personality':
+            mainHeading = 'Your Personality';
+            break;
 
           case 'Life on the Horizon':
             mainHeading = 'Life on the Horizon';

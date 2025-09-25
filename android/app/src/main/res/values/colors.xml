@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom colors for DateTimePicker -->
+    <color name="custom_picker_background">#223149</color>
+    <color name="custom_picker_text">#FFFFFF</color>
+    <color name="custom_picker_accent">#223149</color>
+    <color name="custom_picker_primary">#223149</color>
+    <color name="custom_picker_primary_dark">#223149</color>
+    <color name="custom_picker_control_highlight">#223149</color>
+    <color name="custom_picker_control_activated">#223149</color>
+</resources>
+

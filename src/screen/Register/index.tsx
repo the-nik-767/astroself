@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import * as RNLocalize from 'react-native-localize';
 import { COUNTRY_CODES, isoToDialMap } from '../../constant/countryCodes';
-import { responsiveWidth, font, fontFamily, color, responsiveHeight } from '../../constant/theme';
+import { responsiveWidth, font, fontFamily, color } from '../../constant/theme';
 // import serviceFactory from '../../services/serviceFactory';
 // import UserService from '../../services/user/user.service';
 // import {InputBox} from '../../components/common/inputBox';
@@ -62,6 +62,18 @@ const Register = () => {
   const [countryCode, setCountryCode] = useState('+91');
   const [isCcModalVisible, setIsCcModalVisible] = useState(false);
 
+  // Password strength validation
+  const getPasswordStrength = (password: string) => {
+    const checks = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      symbol: /[!@#$%^&*]/.test(password),
+    };
+    return checks;
+  };
+
   const countryCodes = COUNTRY_CODES;
 
   React.useEffect(() => {
@@ -91,7 +103,21 @@ const Register = () => {
       .min(6, 'Please enter a valid phone number')
       .required('Please enter your phone number'),
     password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
+
+      .matches(
+        /[A-Z]/,
+        'Password must contain at least one uppercase letter (A-Z)',
+      )
+      .matches(
+        /[a-z]/,
+        'Password must contain at least one lowercase letter (a-z)',
+      )
+      .matches(/[0-9]/, 'Password must contain at least one number (0-9)')
+      .matches(
+        /[!@#$%^&*]/,
+        'Password must contain at least one symbol (!, @, #, $, %, ^, &, *)',
+      )
+      .min(8, 'Password must be at least 8 characters')
       .required('Please enter your password'),
   });
 
@@ -359,6 +385,45 @@ const Register = () => {
             {formik.touched.password && formik.errors.password && (
               <Text style={styles.errorText}>{formik.errors.password}</Text>
             )}
+            
+            {/* Password Strength Indicator */}
+            {/* {formik.values.password.length > 0 && (
+              <View style={styles.passwordStrengthContainer}>
+                <Text style={styles.passwordStrengthTitle}>Password Requirements:</Text>
+                {(() => {
+                  const strength = getPasswordStrength(formik.values.password);
+                  return (
+                    <View style={styles.passwordRequirements}>
+                      <View style={styles.requirementItem}>
+                        <Text style={[styles.requirementText, strength.length && styles.requirementMet]}>
+                          {strength.length ? '✓' : '○'} At least 8 characters
+                        </Text>
+                      </View>
+                      <View style={styles.requirementItem}>
+                        <Text style={[styles.requirementText, strength.uppercase && styles.requirementMet]}>
+                          {strength.uppercase ? '✓' : '○'} One uppercase letter (A-Z)
+                        </Text>
+                      </View>
+                      <View style={styles.requirementItem}>
+                        <Text style={[styles.requirementText, strength.lowercase && styles.requirementMet]}>
+                          {strength.lowercase ? '✓' : '○'} One lowercase letter (a-z)
+                        </Text>
+                      </View>
+                      <View style={styles.requirementItem}>
+                        <Text style={[styles.requirementText, strength.number && styles.requirementMet]}>
+                          {strength.number ? '✓' : '○'} One number (0-9)
+                        </Text>
+                      </View>
+                      <View style={styles.requirementItem}>
+                        <Text style={[styles.requirementText, strength.symbol && styles.requirementMet]}>
+                          {strength.symbol ? '✓' : '○'} One symbol (!, @, #, $, %, ^, &, *)
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })()}
+              </View>
+            )} */}
             {formik.errors.general && (
               <Text style={styles.errorText}>{formik.errors.general}</Text>
             )}
@@ -738,6 +803,36 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     // ...font.buttonSmall,
+  },
+  passwordStrengthContainer: {
+    backgroundColor: '#1A2332',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#496CA8',
+  },
+  passwordStrengthTitle: {
+    color: color.themeTextWhite,
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  passwordRequirements: {
+    gap: 4,
+  },
+  requirementItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  requirementText: {
+    color: '#B0B0B0',
+    fontSize: 12,
+    marginLeft: 4,
+  },
+  requirementMet: {
+    color: '#4CAF50',
+    fontWeight: '500',
   },
 });
 

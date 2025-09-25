@@ -20,11 +20,11 @@ export enum HttpStatusCode {
 
 const baseURL = __DEV__
   ? Platform.select({
-      android: 'http://astrology.hcshub.in/api',
-      ios: 'http://astrology.hcshub.in/api',
-      default: 'http://astrology.hcshub.in/api',
+      android: 'https://astrology.hcshub.in/api',
+      ios: 'https://astrology.hcshub.in/api',
+      default: 'https://astrology.hcshub.in/api',
     })
-  : 'http://astrology.hcshub.in/api'; // Production URL
+  : 'https://astrology.hcshub.in/api'; // Production URL
 
 // Create Axios instance with default headers
 const http = axios.create({

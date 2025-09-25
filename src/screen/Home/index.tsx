@@ -218,12 +218,21 @@ const HomeScreen = () => {
       // Handle new flat structure with direct dasha types
       const dashaTypes = ['MahaDasha', 'AntarDasha', 'PratyantarDasha', 'SookshmaDasha', 'PranDasha'];
       
+      // Mapping for display names
+      const dashaDisplayNames: { [key: string]: string } = {
+        'MahaDasha': 'Maha Dasha',
+        'AntarDasha': 'Antar Dasha',
+        'PratyantarDasha': 'Pratyantar Dasha',
+        'SookshmaDasha': 'Sookshma Dasha',
+        'PranDasha': 'Pran Dasha'
+      };
+      
       dashaTypes.forEach((dashaType) => {
         if (apiRes[dashaType]) {
           const dashaInfo = apiRes[dashaType];
           parsed.push({
-            icon: `http://astrology.hcshub.in/api/${dashaInfo.path}`,
-            dashaname: dashaType,
+            icon: `https://astrology.hcshub.in/api/${dashaInfo.path}`,
+            dashaname: dashaDisplayNames[dashaType] || dashaType,
             planetname: dashaInfo.planet,
             start: formatDashaDate(dashaInfo.start),
             end: formatDashaDate(dashaInfo.end),
@@ -416,7 +425,7 @@ const HomeScreen = () => {
                       </Text>
                       <TouchableOpacity
                         style={styles.emptyStateButton}
-                        activeOpacity={0.7}
+                        // activeOpacity={0.7}
                         onPress={() => navigation.navigate('AddNewMember')}
                       >
                         <Text style={styles.emptyStateButtonText}>
@@ -694,8 +703,8 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    width: responsiveWidth('35%'),
-    // paddingHorizontal: 14,
+    // width: responsiveHeight('15'),
+    paddingHorizontal: 14,
     marginTop: responsiveWidth('1'),
     alignSelf: 'flex-start',
   },
@@ -721,6 +730,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: responsiveWidth('15%'),
     paddingHorizontal: responsiveWidth('5'),
+    paddingVertical: Platform.OS === 'android' ? responsiveWidth('2') : responsiveWidth('0'),
     // paddingVertical: -responsiveWidth('5'),
   },
   membersBgImage: {
@@ -740,7 +750,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'space-between',
     // alignSelf: 'center',
-    paddingVertical: responsiveWidth('2.5'),
+    paddingVertical: Platform.OS === 'android' ? responsiveWidth('2.5') : responsiveWidth('0'),
     // paddingHorizontal: responsiveWidth('3'),
   },
   membersContent: {
@@ -763,9 +773,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    width: responsiveWidth('35%'),
+    // width: responsiveHeight('15'),
     paddingVertical: 14,
-    // paddingHorizontal: 14,
+    paddingHorizontal: 14,
     // marginTop: responsiveWidth('0.5'),
     alignSelf: 'flex-start',
   },
@@ -818,7 +828,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 14,
     paddingHorizontal: 14,
-    marginTop: responsiveWidth('5'),
+    marginTop: Platform.OS === 'android' ? responsiveWidth('5') : responsiveWidth('4'),
     alignSelf: 'flex-start',
   },
   emptyStateButtonText: {
@@ -828,7 +838,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   emptyStateImage: {
-    width: responsiveWidth('35%'),
+    width:  responsiveWidth('35%'),
     height: responsiveWidth('35%'),
     resizeMode: 'contain',
     marginLeft: 10,

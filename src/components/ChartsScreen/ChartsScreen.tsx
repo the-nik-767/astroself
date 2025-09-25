@@ -68,7 +68,7 @@ export default function ChartsScreen({ chartDetails }: ChartsScreenProps) {
       return {
         house: planet.house?.toString() || '--',
         planet: planet.name || '--',
-        signIcon: getZodiacShortName(planet.sign || ''), // Convert to short zodiac name
+        signIcon: planet.sign || '', // Convert to short zodiac name
         degree: `${planet.normDegree?.toFixed(2)} - ${planet.nakshatra} `,
         isRetro: planet.isRetro === 'true',
         planetAwastha: planet.planet_awastha || '--',
@@ -260,7 +260,7 @@ export default function ChartsScreen({ chartDetails }: ChartsScreenProps) {
                 >
                   <Text style={styles.dashaCellHouse}>{row.house}</Text>
                   <Text style={styles.dashaCellPlanet}>
-                    {row.planet?.substring(0, 3)}
+                    {row.planet}
                     {row.isRetro ? ' (R)' : ''}
                   </Text>
                   <View style={styles.dashaCellSign}>
@@ -342,8 +342,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     color: '#333',
   },
-  dashaCardContainer: {
-  },
+  dashaCardContainer: {},
 
   membersCard: {
     borderRadius: 16,
@@ -365,7 +364,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   dashaTitle: {
-    color: color.themeTextWhite,  
+    color: color.themeTextWhite,
     fontSize: 18,
     marginLeft: responsiveWidth('4'),
     marginVertical: responsiveWidth('3'),
@@ -406,7 +405,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   dashaHeaderPlanet: {
-    width: responsiveWidth('15'),
+    width: responsiveWidth('20'),
     color: '#23304D',
     fontWeight: 'bold',
     fontSize: 14,
@@ -414,7 +413,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   dashaHeaderSign: {
-    width: responsiveWidth('15'),
+    width: responsiveWidth('20'),
     color: '#23304D',
     fontWeight: 'bold',
     fontSize: 14,
@@ -446,7 +445,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   dashaCellPlanet: {
-    width: responsiveWidth('15'),
+    width: responsiveWidth('20'),
     color: '#23304D',
     fontSize: 14,
     fontFamily: fontFamily.regular,
@@ -454,11 +453,17 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   dashaCellSign: {
-    width: responsiveWidth('15'),
+    width: responsiveWidth('20'),
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
   dashaSignIcon: {
+    width: responsiveWidth('20'),
+    color: '#23304D',
+    fontSize: 14,
+    fontFamily: fontFamily.regular,
+    textAlign: 'left',
+    fontWeight: '400',
   },
   dashaCellDegree: {
     width: responsiveWidth('40'),
@@ -492,10 +497,10 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#D6C295',
+    backgroundColor: '#23304D',
   },
   paginationDotActive: {
-    backgroundColor: '#23304D',
+    backgroundColor: 'rgba(223, 138, 93, 1)',
     width: 12,
     height: 8,
     borderRadius: 4,

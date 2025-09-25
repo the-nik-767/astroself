@@ -195,7 +195,7 @@ const NakshatraScreen = () => {
 
     if (planetIcon && planetIcon.path) {
       // Return the path as a URI for remote images
-      return { uri: `http://astrology.hcshub.in/api/${planetIcon.path}` };
+      return { uri: `https://astrology.hcshub.in/api/${planetIcon.path}` };
     }
 
     return require('../../assets/icons/Saturn.png'); // Fallback icon
@@ -221,6 +221,15 @@ const NakshatraScreen = () => {
 
     const overview = [];
 
+    // Mapping for display names
+    const dashaDisplayNames: { [key: string]: string } = {
+      'MahaDasha': 'Maha dasha',
+      'AntarDasha': 'Antar dasha',
+      'PratyantarDasha': 'Pratyantar dasha',
+      'SookshmaDasha': 'Sookshma dasha',
+      'PranDasha': 'Pran dasha'
+    };
+
     // Check MahaDasha (major)
     if (chartDetails.all_dasha.major?.dasha_period) {
       const activeMajor = chartDetails.all_dasha.major.dasha_period.find(
@@ -234,7 +243,7 @@ const NakshatraScreen = () => {
         );
         overview.push({
           id: 1,
-          type: 'MahaDasha',
+          type: dashaDisplayNames['MahaDasha'],
           planet: activeMajor.planet,
           icon: getPlanetIcon(activeMajor.planet),
           startDate: formatDateForDisplay(activeMajor.start),
@@ -251,7 +260,7 @@ const NakshatraScreen = () => {
       if (activeMinor) {
         overview.push({
           id: 2,
-          type: 'AntarDasha',
+          type: dashaDisplayNames['AntarDasha'],
           planet: activeMinor.planet,
           icon: getPlanetIcon(activeMinor.planet),
           startDate: formatDateForDisplay(activeMinor.start),
@@ -268,7 +277,7 @@ const NakshatraScreen = () => {
       if (activeSubMinor) {
         overview.push({
           id: 3,
-          type: 'PratyantarDasha',
+          type: dashaDisplayNames['PratyantarDasha'],
           planet: activeSubMinor.planet,
           icon: getPlanetIcon(activeSubMinor.planet),
           startDate: formatDateForDisplay(activeSubMinor.start),
@@ -286,7 +295,7 @@ const NakshatraScreen = () => {
       if (activeSubSubMinor) {
         overview.push({
           id: 4,
-          type: 'SookshmaDasha',
+          type: dashaDisplayNames['SookshmaDasha'],
           planet: activeSubSubMinor.planet,
           icon: getPlanetIcon(activeSubSubMinor.planet),
           startDate: formatDateForDisplay(activeSubSubMinor.start),
@@ -304,7 +313,7 @@ const NakshatraScreen = () => {
       if (activeSubSubSubMinor) {
         overview.push({
           id: 5,
-          type: 'PranDasha',
+          type: dashaDisplayNames['PranDasha'],
           planet: activeSubSubSubMinor.planet,
           icon: getPlanetIcon(activeSubSubSubMinor.planet),
           startDate: formatDateForDisplay(activeSubSubSubMinor.start),
@@ -390,10 +399,7 @@ const NakshatraScreen = () => {
                 <Text
                   style={[
                     styles.emptyStateTitle,
-                    {
-                      textAlign: 'left' as const,
-                      marginTop: -responsiveWidth('4'),
-                    },
+                   
                   ]}
                 >
                   Add your details to generate your charts
@@ -858,8 +864,8 @@ const styles = StyleSheet.create({
 
   membersCard: {
     borderRadius: 16,
-    padding: responsiveWidth('2%'),
-    paddingVertical: responsiveWidth('4%'),
+    padding: Platform.OS === 'android' ? responsiveWidth('2%') : responsiveWidth('0'),
+    // paddingVertical: responsiveWidth('4%'),
     marginTop: responsiveWidth('2%'),
     marginHorizontal: responsiveWidth('3'),
     marginBottom: 24,
@@ -880,15 +886,15 @@ const styles = StyleSheet.create({
     // backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   dashaTitle: {
-    color: color.themeTextWhite,
     fontFamily: fontFamily.regular,
-    fontWeight: '600',
-    fontSize: 16,
-    lineHeight: 24,
+    fontWeight: '500',
+    fontSize: 18,
+    // lineHeight: 30,
     letterSpacing: -0.14,
-    marginBottom: 16,
+    color: color.themeTextWhite,
+    // textAlignVertical: 'center',
     textAlignVertical: 'center',
-    marginLeft: responsiveWidth('2'),
+    // marginTop: responsiveWidth('2'),
   },
   dashaCardsRow: {
     flexDirection: 'row',
@@ -1181,6 +1187,8 @@ const styles = StyleSheet.create({
   emptyStateContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingLeft: responsiveWidth(4),
+    // paddingRight: responsiveWidth(2),
     justifyContent: 'space-between',
   },
   emptyStateContent: {
@@ -1189,30 +1197,30 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontFamily: fontFamily.regular,
     fontWeight: '500',
-    fontSize: 20,
-    lineHeight: 30,
+    fontSize: 16,
+    // lineHeight: 30,
     letterSpacing: -0.14,
-    color: '#F6EFD9',
+    color: color.themeTextWhite,
     textAlignVertical: 'center',
   },
   emptyStateButton: {
-    borderColor: '#F6EFD9',
+    borderColor: color.themeTextWhite,
     borderWidth: 1,
     borderRadius: 10,
-    paddingVertical: responsiveWidth('3'),
-    paddingHorizontal: 24,
-    marginTop: responsiveWidth('5'),
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    marginTop: responsiveWidth('2'),
     alignSelf: 'flex-start',
   },
   emptyStateButtonText: {
     fontFamily: fontFamily.regular,
-    color: '#F6EFD9',
-    fontWeight: '600',
-    fontSize: 14,
+    color: color.themeTextWhite,
+    // fontWeight: '600',
+    fontSize: 12,
   },
   emptyStateImage: {
-    width: responsiveWidth('35%'),
-    height: responsiveWidth('35%'),
+    width: responsiveWidth('30%'),
+    height: responsiveWidth('30%'),
     resizeMode: 'contain',
     marginLeft: 10,
   },

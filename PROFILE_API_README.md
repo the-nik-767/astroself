@@ -4,7 +4,7 @@ This document describes the profile data API integration for the Astroself app.
 
 ## API Endpoint
 
-**URL:** `http://astrology.hcshub.in/api/astrology/birth_data`
+**URL:** `https://astrology.hcshub.in/api/astrology/birth_data`
 
 **Method:** `GET`
 

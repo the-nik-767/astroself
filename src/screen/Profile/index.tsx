@@ -498,7 +498,9 @@ const ProfileScreen = () => {
                 <Text style={styles.birthChartTitle}>Your Birth Chart</Text>
                 <TouchableOpacity
                   onPress={() =>
-                     navigation.navigate('NakshatraScreen', { userId: getPrimaryMemberId() })
+                    navigation.navigate('NakshatraScreen', {
+                      userId: getPrimaryMemberId(),
+                    })
                   }
                   style={styles.fullChartBtn}
                 >
@@ -573,6 +575,7 @@ const ProfileScreen = () => {
                   {/* Action Buttons */}
                 </View>
 
+
                 {/* 3D Human Figures Icon */}
                 <View style={styles.addMemberCardRight}>
                   <Image
@@ -586,8 +589,12 @@ const ProfileScreen = () => {
                   0,
                   (profileData?.members_allow || 0) -
                     (profileData?.current_members || 0),
+                ) === 0 && Math.max(
+                  0,
+                  (profileData?.child_allow || 0) -
+                    (profileData?.current_child || 0),
                 ) === 0
-                  ? 'No members available'
+                  ? 'No members or children available'
                   : `You can create ${Math.max(
                       0,
                       (profileData?.members_allow || 0) -
@@ -599,6 +606,38 @@ const ProfileScreen = () => {
                           (profileData?.current_members || 0),
                       ) !== 1
                         ? 's'
+                        : ''
+                    }${
+                      Math.max(
+                        0,
+                        (profileData?.members_allow || 0) -
+                          (profileData?.current_members || 0),
+                      ) > 0 && Math.max(
+                        0,
+                        (profileData?.child_allow || 0) -
+                          (profileData?.current_child || 0),
+                      ) > 0
+                        ? ' and '
+                        : ''
+                    }${
+                      Math.max(
+                        0,
+                        (profileData?.child_allow || 0) -
+                          (profileData?.current_child || 0),
+                      ) > 0
+                        ? ` ${Math.max(
+                            0,
+                            (profileData?.child_allow || 0) -
+                              (profileData?.current_child || 0),
+                          )} more Child${
+                              Math.max(
+                                0,
+                                (profileData?.child_allow || 0) -
+                                  (profileData?.current_child || 0),
+                              ) !== 1
+                                ? 'ren'
+                                : ''
+                            }`
                         : ''
                     }`}
               </Text>
@@ -613,6 +652,10 @@ const ProfileScreen = () => {
                       0,
                       (profileData?.members_allow || 0) -
                         (profileData?.current_members || 0),
+                    ) === 0 && Math.max(
+                      0,
+                      (profileData?.child_allow || 0) -
+                        (profileData?.current_child || 0),
                     ) === 0 && styles.fullWidthButton,
                   ]}
                   disabled={isProcessingPayment}
@@ -622,12 +665,16 @@ const ProfileScreen = () => {
                   </Text>
                 </TouchableOpacity>
 
-                {/* Only show Create button if there are remaining member slots */}
-                {Math.max(
+                {/* Only show Create button if there are remaining member or child slots */}
+                {(Math.max(
                   0,
                   (profileData?.members_allow || 0) -
                     (profileData?.current_members || 0),
-                ) > 0 && (
+                ) > 0 || Math.max(
+                  0,
+                  (profileData?.child_allow || 0) -
+                    (profileData?.current_child || 0),
+                ) > 0) && (
                   <TouchableOpacity
                     onPress={() => navigation.navigate('AddNewMember')}
                     style={[styles.actionButton, styles.createButton]}
@@ -926,6 +973,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: responsiveWidth('15%'),
     paddingHorizontal: responsiveWidth('5'),
+    paddingVertical: Platform.OS === 'android' ? responsiveWidth('2') : responsiveWidth('0'),
   },
   membersBgImage: {
     borderRadius: 16,
@@ -1175,7 +1223,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'space-between',
     // alignSelf: 'center',
-    paddingVertical: responsiveWidth('2.5'),
+    paddingVertical: Platform.OS === 'android' ? responsiveWidth('2.5') : responsiveWidth('0'),
     // paddingHorizontal: responsiveWidth('3'),
   },
   membersContent: {
@@ -1199,7 +1247,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    width: responsiveWidth('35%'),
+    // width: responsiveWidth('35%'),
+    paddingHorizontal: 14,
     paddingVertical: 14,
     // paddingHorizontal: 14,
     // marginTop: responsiveWidth('0.5'),

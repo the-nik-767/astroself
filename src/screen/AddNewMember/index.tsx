@@ -67,6 +67,9 @@ const AddNewMember = () => {
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
   const [iosTempDate, setIosTempDate] = useState<Date | null>(null);
   const [iosTempTime, setIosTempTime] = useState<Date | null>(null);
+  const [tempHour, setTempHour] = useState(12);
+  const [tempMinute, setTempMinute] = useState(0);
+  const [tempAmPm, setTempAmPm] = useState('AM');
   const [searchQuery, setSearchQuery] = useState('');
   const [places, setPlaces] = useState<Place[]>([]);
   const [isPlaceDropdownOpen, setIsPlaceDropdownOpen] = useState(false);
@@ -290,6 +293,47 @@ const AddNewMember = () => {
     });
   };
 
+  // Custom time picker functions
+  const generateHours = () => {
+    return Array.from({ length: 12 }, (_, i) => i + 1);
+  };
+
+  const generateMinutes = () => {
+    return Array.from({ length: 60 }, (_, i) => i);
+  };
+
+  const generateAmPm = () => {
+    return ['AM', 'PM'];
+  };
+
+  const handleTimeConfirm = () => {
+    let hour24 = tempHour;
+    if (tempAmPm === 'PM' && tempHour !== 12) {
+      hour24 = tempHour + 12;
+    } else if (tempAmPm === 'AM' && tempHour === 12) {
+      hour24 = 0;
+    }
+
+    const time = new Date();
+    time.setHours(hour24, tempMinute, 0, 0);
+    
+    setSelectedTime(time);
+    formik.setFieldValue('timeOfBirth', formatTime(time));
+    setShowTimePicker(false);
+  };
+
+  const handleTimeCancel = () => {
+    setShowTimePicker(false);
+    // Reset to current time or selected time
+    if (selectedTime) {
+      const hour = selectedTime.getHours();
+      const minute = selectedTime.getMinutes();
+      setTempHour(hour === 0 ? 12 : hour > 12 ? hour - 12 : hour);
+      setTempMinute(minute);
+      setTempAmPm(hour >= 12 ? 'PM' : 'AM');
+    }
+  };
+
   const handlePlaceSelect = async (item: DropdownItem) => {
     console.log('item-->123', item);
 
@@ -343,8 +387,7 @@ const AddNewMember = () => {
               />
             </TouchableOpacity>
             <View style={styles.backIconWrap}>
-
-            <Text style={styles.topBarText}>Add New Member</Text>
+              <Text style={styles.topBarText}>Add New Member</Text>
             </View>
           </View>
 
@@ -396,7 +439,10 @@ const AddNewMember = () => {
                 </Text>
                 <Image
                   source={require('../../assets/icons/Dropdown.png')}
-                  style={[styles.dropdownIcon, { marginRight: responsiveWidth('0') }]}
+                  style={[
+                    styles.dropdownIcon,
+                    { marginRight: responsiveWidth('0') },
+                  ]}
                 />
               </TouchableOpacity>
               {formik.touched.gender && formik.errors.gender && (
@@ -420,12 +466,18 @@ const AddNewMember = () => {
                 </Text>
                 <Image
                   source={require('../../assets/icons/Dropdown.png')}
-                  style={[styles.dropdownIcon, { marginRight: responsiveWidth('0') }]}
+                  style={[
+                    styles.dropdownIcon,
+                    { marginRight: responsiveWidth('0') },
+                  ]}
                 />
               </TouchableOpacity>
-              {formik.touched.predictionType && formik.errors.predictionType && (
-                <Text style={styles.errorText}>{formik.errors.predictionType}</Text>
-              )}
+              {formik.touched.predictionType &&
+                formik.errors.predictionType && (
+                  <Text style={styles.errorText}>
+                    {formik.errors.predictionType}
+                  </Text>
+                )}
             </View>
 
             {/* Date of Birth */}
@@ -679,7 +731,6 @@ const AddNewMember = () => {
               formik.setFieldValue('dateOfBirth', formatDate(date));
             }
           }}
-          themeVariant="dark"
         />
       )}
       {showDatePicker && Platform.OS === 'ios' && (
@@ -732,22 +783,151 @@ const AddNewMember = () => {
         </Modal>
       )}
 
-      {/* Native Time Picker */}
+      {/*  Time Picker  android */}
       {showTimePicker && Platform.OS !== 'ios' && (
-        <DateTimePicker
-          value={selectedTime || new Date()}
-          mode="time"
-          display="default"
-          is24Hour={false}
-          onChange={(event: any, time?: Date) => {
-            setShowTimePicker(false);
-            if (event?.type === 'set' && time) {
-              setSelectedTime(time);
-              formik.setFieldValue('timeOfBirth', formatTime(time));
-            }
-          }}
-          themeVariant="dark"
-        />
+        <Modal transparent >
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.modalBackdrop}
+            onPress={() => setShowTimePicker(false)}
+          >
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.modalSheet}
+              onPress={(e) => e.stopPropagation()}
+            >
+              <View style={styles.modalHandle} />
+              <View style={{ paddingHorizontal: 20, paddingTop: 12 }}>
+                <Text style={styles.modalTitle}>Select Time of Birth</Text>
+              </View>
+              <View style={styles.timePickerContainer}>
+                <View style={styles.timePickerRow}>
+                  {/* Hour Picker */}
+                  <View style={styles.timePickerColumn}>
+                    {/* <Text style={styles.timePickerLabel}>Hour</Text> */}
+                    <View style={styles.timePickerWrapper}>
+                      <View style={styles.timePickerCenterIndicator} />
+                      <ScrollView
+                        style={styles.timePickerScroll}
+                        showsVerticalScrollIndicator={false}
+                        snapToInterval={40}
+                        decelerationRate="fast"
+                        contentContainerStyle={styles.timePickerContent}
+                        contentOffset={{ x: 0, y: (tempHour - 1) * 40 }}
+                      >
+                        {generateHours().map((hour) => (
+                          <TouchableOpacity
+                            key={hour}
+                            style={[
+                              styles.timePickerItem,
+                              tempHour === hour && styles.timePickerItemSelected,
+                            ]}
+                            onPress={() => setTempHour(hour)}
+                          >
+                            <Text
+                              style={[
+                                styles.timePickerItemText,
+                                tempHour === hour && styles.timePickerItemTextSelected,
+                              ]}
+                            >
+                              {hour.toString().padStart(2, '0')}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  </View>
+
+                  {/* Minute Picker */}
+                  <View style={styles.timePickerColumn}>
+                    {/* <Text style={styles.timePickerLabel}>Minute</Text> */}
+                    <View style={styles.timePickerWrapper}>
+                      <View style={styles.timePickerCenterIndicator} />
+                      <ScrollView
+                        style={styles.timePickerScroll}
+                        showsVerticalScrollIndicator={false}
+                        snapToInterval={40}
+                        decelerationRate="fast"
+                        contentContainerStyle={styles.timePickerContent}
+                        contentOffset={{ x: 0, y: tempMinute * 40 }}
+                      >
+                        {generateMinutes().map((minute) => (
+                          <TouchableOpacity
+                            key={minute}
+                            style={[
+                              styles.timePickerItem,
+                              tempMinute === minute && styles.timePickerItemSelected,
+                            ]}
+                            onPress={() => setTempMinute(minute)}
+                          >
+                            <Text
+                              style={[
+                                styles.timePickerItemText,
+                                tempMinute === minute && styles.timePickerItemTextSelected,
+                              ]}
+                            >
+                              {minute.toString().padStart(2, '0')}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  </View>
+
+                  {/* AM/PM Picker */}
+                  <View style={styles.timePickerColumn}>
+                    {/* <Text style={styles.timePickerLabel}>Period</Text> */}
+                    <View style={styles.timePickerWrapper}>
+                      <View style={styles.timePickerCenterIndicator} />
+                      <ScrollView
+                        style={styles.timePickerScroll}
+                        showsVerticalScrollIndicator={false}
+                        snapToInterval={40}
+                        decelerationRate="fast"
+                        contentContainerStyle={styles.timePickerContent}
+                        contentOffset={{ x: 0, y: tempAmPm === 'AM' ? 0 : 40 }}
+                      >
+                        {generateAmPm().map((period) => (
+                          <TouchableOpacity
+                            key={period}
+                            style={[
+                              styles.timePickerItem,
+                              tempAmPm === period && styles.timePickerItemSelected,
+                            ]}
+                            onPress={() => setTempAmPm(period)}
+                          >
+                            <Text
+                              style={[
+                                styles.timePickerItemText,
+                                tempAmPm === period && styles.timePickerItemTextSelected,
+                              ]}
+                            >
+                              {period}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.modalButtonContainer}>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={handleTimeCancel}
+                >
+                  <Text style={styles.modalButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.modalButtonPrimary]}
+                  onPress={handleTimeConfirm}
+                >
+                  <Text style={[styles.modalButtonText, styles.modalButtonTextPrimary]}>Done</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </Modal>
       )}
       {showTimePicker && Platform.OS === 'ios' && (
         <Modal transparent animationType="fade">
@@ -761,6 +941,7 @@ const AddNewMember = () => {
                 mode="time"
                 display="spinner"
                 is24Hour={false}
+               
                 onChange={(event: any, time?: Date) => {
                   if (time) setIosTempTime(time);
                 }}
@@ -928,7 +1109,11 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    // backgroundColor: 'rgba(0,0,0,0.5)',
+   
+  //  bottom: 0,
+  // marginBottom: -10,
+    
     justifyContent: 'flex-end',
   },
   modalSheet: {
@@ -936,14 +1121,14 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     maxHeight: '60%',
-    paddingBottom: 16,
+    // paddingBottom: 16,
   },
   modalHandle: {
     alignSelf: 'center',
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#5DADE2',
+    backgroundColor: 'rgba(34, 49, 73, 1)',
     marginVertical: 12,
   },
   modalTitle: {
@@ -1084,6 +1269,61 @@ const styles = StyleSheet.create({
   },
   timePickerContainer: {
     paddingHorizontal: 20,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 150,
+  },
+  timePickerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+  },
+  timePickerColumn: {
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  timePickerLabel: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontFamily: fontFamily.regular,
+    marginBottom: 10,
+    fontWeight: '600',
+  },
+  timePickerWrapper: {
+    height: 120,
+    width: '100%',
+    position: 'relative',
+  },
+  timePickerScroll: {
+    height: 120,
+    width: '100%',
+  },
+  timePickerContent: {
+    paddingVertical: 40, // Add padding to center the first and last items
+  },
+  timePickerItem: {
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 2,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
+  },
+  timePickerItemSelected: {
+    backgroundColor: 'rgba(34, 49, 73, 1)',
+  },
+  timePickerItemText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontFamily: fontFamily.regular,
+    fontWeight: '500',
+  },
+  timePickerItemTextSelected: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
   },
   timeOption: {
     paddingVertical: 16,
@@ -1093,6 +1333,35 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontFamily: fontFamily.regular,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    gap: 12,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: 'rgba(34, 49, 73, 1)',
+    // backgroundColor: clo,
+    alignItems: 'center',
+  },
+  modalButtonPrimary: {
+    backgroundColor: 'rgba(34, 49, 73, 1)',
+  },
+  modalButtonText: {
+    color:'#FFFFFF',
+    fontSize: 16,
+    fontFamily: fontFamily.regular,
+    fontWeight: '600',
+  },
+  modalButtonTextPrimary: {
+    color: '#FFFFFF',
   },
 });
 

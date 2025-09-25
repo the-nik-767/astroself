@@ -102,14 +102,14 @@ const CurrentSituation: React.FC<CurrentSituationProps> = ({ selectedMemberId })
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {error && (
+        {/* {error && (
           <View style={styles.errorContainer}>
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={fetchDashaData} style={styles.retryButton}>
               <Text style={styles.retryButtonText}>Retry</Text>
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
         <View style={styles.cardsGrid}>
           {cards.map(card => (
             <TouchableOpacity 

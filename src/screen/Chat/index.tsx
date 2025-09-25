@@ -15,7 +15,7 @@ import {
   Alert,
   ImageBackground,
 } from 'react-native';
-import {font, responsiveHeight, responsiveWidth, fontFamily, color} from '../../constant/theme';
+import {font, responsiveHeight, responsiveWidth, fontFamily, color, fontSize} from '../../constant/theme';
 import { MainContainer } from '../../components/common/mainContainer';
 import { useProfileData } from '../../hooks/useProfileData';
 import CurrentSituation from '../../components/CurrentSituation';
@@ -31,7 +31,7 @@ const ChatScreen = () => {
   const [hasUserSelectedMember, setHasUserSelectedMember] = useState(false);
   const navigation = useNavigation<any>();
 
-  const { membersData, error, refreshProfileData } = useProfileData();
+  const { membersData, loading, error, refreshProfileData } = useProfileData();
 
   // Refresh data every time user comes to this screen
   useFocusEffect(
@@ -43,7 +43,7 @@ const ChatScreen = () => {
       // Reset user selection flag so primary member is shown again
       setHasUserSelectedMember(false);
       setSelectedMemberId(null);
-    }, [refreshProfileData])
+    }, [refreshProfileData]),
   );
 
   // Show error alert if there's an error
@@ -55,6 +55,18 @@ const ChatScreen = () => {
       ]);
     }
   }, [error, refreshProfileData]);
+
+  // Show loading state
+  // if (loading) {
+  //   return (
+  //     <MainContainer>
+  //       <StatusBar barStyle="light-content" backgroundColor="#202945" />
+  //       <View style={styles.loadingContainer}>
+  //         <Text style={styles.loadingText}>Loading Predictions...</Text>
+  //       </View>
+  //     </MainContainer>
+  //   );
+  // }
 
   // Set selectedMemberId based on primary member from membersData (only initially)
   useEffect(() => {
@@ -68,14 +80,17 @@ const ChatScreen = () => {
       // Function to get primary member ID
       const getPrimaryMemberId = () => {
         console.log('Looking for primary member in membersData:', membersData);
-        
+
         // Look for a member with primary_mamber field set to "True"
-        const primaryMember = membersData.find(
-          (member: any) => {
-            console.log('Checking member:', member.full_name, 'primary_mamber:', member.primary_mamber);
-            return member.primary_mamber === "True";
-          }
-        );
+        const primaryMember = membersData.find((member: any) => {
+          console.log(
+            'Checking member:',
+            member.full_name,
+            'primary_mamber:',
+            member.primary_mamber,
+          );
+          return member.primary_mamber === 'True';
+        });
 
         if (primaryMember) {
           console.log('Found primary member:', primaryMember);
@@ -84,12 +99,18 @@ const ChatScreen = () => {
 
         // If no primary_mamber == "True" found, use first member
         const firstMember = membersData[0];
-        console.log('No primary member found, using first member:', firstMember);
+        console.log(
+          'No primary member found, using first member:',
+          firstMember,
+        );
         return firstMember?.id || firstMember?._id || null;
       };
 
       const primaryMemberId = getPrimaryMemberId();
-      console.log('Setting initial selection to primary member:', primaryMemberId);
+      console.log(
+        'Setting initial selection to primary member:',
+        primaryMemberId,
+      );
       setSelectedMemberId(primaryMemberId);
     }
   }, [membersData, hasUserSelectedMember]);
@@ -102,6 +123,55 @@ const ChatScreen = () => {
       Alert.alert('Error', 'Please select a member first');
     }
   };
+
+  // Show empty state if no members data
+  if (!membersData || membersData.length === 0) {
+    return (
+      <MainContainer>
+        <StatusBar barStyle="light-content" backgroundColor="#202945" />
+
+        <View style={styles.header}>
+          <View style={styles.headerRow}>
+            <View style={styles.headerCenter}>
+              <Text style={styles.headerTitle}>Predictions</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Empty State Card */}
+        <ImageBackground
+          source={require('../../assets/image/DarkBackground.png')}
+          blurRadius={12}
+          style={styles.emptyStateCardContainer as any}
+          imageStyle={styles.emptyStateCard}
+        >
+          <View style={styles.emptyStateOverlay} />
+          <View style={styles.emptyStateContainer}>
+            <View style={styles.emptyStateContent}>
+              <Text
+                style={[
+                  styles.emptyStateTitle
+                ]}
+              >
+                Add your details to generate your predictions
+              </Text>
+              <TouchableOpacity
+                style={styles.emptyStateButton}
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate('AddNewMember')}
+              >
+                <Text style={styles.emptyStateButtonText}>Add New Member</Text>
+              </TouchableOpacity>
+            </View>
+            <Image
+              source={require('../../assets/image/emptyStateImage.png')}
+              style={styles.emptyStateImage as any}
+            />
+          </View>
+        </ImageBackground>
+      </MainContainer>
+    );
+  }
 
   return (
     <MainContainer>
@@ -130,7 +200,7 @@ const ChatScreen = () => {
         <View style={styles.profileCardContainer}>
           <Image
             source={require('../../assets/icons/profile-icons.png')}
-            style={styles.profileIcon}
+            style={styles.profileIcon as any}
           />
           <View style={styles.dropdownWrapper}>
             <TouchableOpacity
@@ -139,8 +209,9 @@ const ChatScreen = () => {
             >
               <Text style={styles.selectedMemberText}>
                 {selectedMemberId
-                  ? membersData?.find((m: any) => (m.id || m._id) == selectedMemberId)
-                      ?.full_name || 'Select Member'
+                  ? membersData?.find(
+                      (m: any) => (m.id || m._id) == selectedMemberId,
+                    )?.full_name || 'Select Member'
                   : 'Select Member'}
               </Text>
             </TouchableOpacity>
@@ -195,7 +266,7 @@ const ChatScreen = () => {
           <Image
             source={require('../../assets/icons/Dropdown.png')}
             style={[
-              styles.arrowIcon,
+              styles.arrowIcon as any,
               {
                 transform: [
                   { rotate: isMemberDropdownOpen ? '180deg' : '0deg' },
@@ -210,7 +281,7 @@ const ChatScreen = () => {
         <ImageBackground
           source={require('../../assets/image/DarkBackground.png')}
           blurRadius={12}
-          style={styles.greetingCard}
+          style={styles.greetingCard as any}
           imageStyle={styles.greetingCardBgImage}
         >
           <View style={styles.greetingOverlay} />
@@ -240,8 +311,9 @@ const ChatScreen = () => {
                 <Text style={styles.detailLabel}>Date of Birth</Text>
                 <Text style={styles.detailValue}>
                   {selectedMemberId &&
-                  membersData?.find((m: any) => (m.id || m._id) == selectedMemberId)
-                    ?.birth_data
+                  membersData?.find(
+                    (m: any) => (m.id || m._id) == selectedMemberId,
+                  )?.birth_data
                     ? (() => {
                         const member = membersData.find(
                           (m: any) => (m.id || m._id) == selectedMemberId,
@@ -265,10 +337,12 @@ const ChatScreen = () => {
                 <Text style={styles.detailLabel}>Place of Birth</Text>
                 <Text style={styles.detailValue}>
                   {selectedMemberId &&
-                  membersData?.find((m: any) => (m.id || m._id) == selectedMemberId)
-                    ?.birthplace
-                    ? membersData.find((m: any) => (m.id || m._id) == selectedMemberId)
-                        .birthplace
+                  membersData?.find(
+                    (m: any) => (m.id || m._id) == selectedMemberId,
+                  )?.birthplace
+                    ? membersData.find(
+                        (m: any) => (m.id || m._id) == selectedMemberId,
+                      ).birthplace
                     : 'Not Available'}
                 </Text>
               </View>
@@ -289,7 +363,7 @@ const ChatScreen = () => {
         <ImageBackground
           source={require('../../assets/image/DarkBackground.png')}
           blurRadius={12}
-          style={styles.tabsContainer}
+          style={styles.tabsContainer as any}
           imageStyle={styles.tabsBgImage}
         >
           <View style={styles.tabsOverlay} />
@@ -312,8 +386,8 @@ const ChatScreen = () => {
                   activeTab === 'Snapshot Predictions' && styles.activeTabText,
                 ]}
               >
-                SnapCast
-              </Text>
+                Snap cast
+              </Text> 
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -329,7 +403,7 @@ const ChatScreen = () => {
                   activeTab === 'Current Situation' && styles.activeTabText,
                 ]}
               >
-                LifeNow
+                Life now
               </Text>
             </TouchableOpacity>
 
@@ -346,7 +420,7 @@ const ChatScreen = () => {
                   activeTab === 'General Analysis' && styles.activeTabText,
                 ]}
               >
-                LifeView
+                Life view
               </Text>
             </TouchableOpacity>
           </ScrollView>
@@ -586,11 +660,11 @@ const styles = StyleSheet.create({
   nakshatraButton: {
     backgroundColor: '#DF8A5D',
     borderRadius: 10,
-    width: responsiveWidth('40%'),
+    // width: responsiveWidth('40%'),
     // flex: 1,
     // marginHorizontal: responsiveWidth('20'),
     paddingVertical: 14,
-    // paddingHorizontal: 14,
+    paddingHorizontal: 14,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -687,15 +761,94 @@ const styles = StyleSheet.create({
   },
   navText: {
     color: '#FFFFFF',
-    ...font.captionSmall,
+    fontSize: fontSize.xxsmall,
+    fontFamily: fontFamily.regular,
+    fontWeight: '400' as const,
   },
   activeNavText: {
     color: '#DF8A5D',
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   tabContentContainer: {
     flex: 1,
     paddingTop: responsiveHeight(1),
+  },
+  // Loading state styles
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: '#F6EFD9',
+    fontSize: fontSize.mediumx,
+    fontWeight: '600' as const,
+  },
+  // Empty state styles
+  emptyStateCardContainer: {
+    marginTop: responsiveWidth('2%'),
+    marginHorizontal: responsiveWidth('4'),
+    // paddingHorizontal: responsiveWidth('4'),
+    paddingVertical: Platform.OS === 'android' ? responsiveWidth('4') : responsiveWidth('0'),
+    marginBottom: 24,
+  },
+  emptyStateCard: {
+    borderRadius: 16,
+    // padding: responsiveWidth('2%'),
+    // paddingVertical: responsiveWidth('2%'),
+    borderWidth: 0.2,
+    borderColor: '#EEE5CA',
+    // opacity: 0.7,
+  },
+  emptyStateOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  emptyStateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: responsiveWidth(4),
+    // paddingRight: responsiveWidth(2),
+    // padding: responsiveWidth(2),
+    justifyContent: 'space-between',
+  },
+  emptyStateContent: {
+    flex: 1,
+  },
+  emptyStateTitle: {
+    fontFamily: fontFamily.regular,
+    fontWeight: '500' ,
+    fontSize: 18,
+    // lineHeight: 30,
+    letterSpacing: -0.14,
+    color: color.themeTextWhite,
+    // textAlignVertical: 'center',
+    textAlignVertical: 'center',
+  },
+  emptyStateButton: {
+    borderColor: color.themeTextWhite,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    marginTop: responsiveWidth('2'),
+    // marginTop: responsiveWidth('5'),
+    alignSelf: 'flex-start',
+  },
+  emptyStateButtonText: {
+    fontFamily: fontFamily.regular,
+    color: color.themeTextWhite,
+    // fontWeight: '600' as const,
+    fontSize: 12,
+  },
+  emptyStateImage: {
+    width: responsiveWidth('30%'),
+    height: responsiveWidth('30%'),
+    resizeMode: 'contain',
+    marginLeft: 10,
   },
 });
 
